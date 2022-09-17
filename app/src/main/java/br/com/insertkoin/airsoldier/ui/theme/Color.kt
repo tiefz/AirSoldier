@@ -2,7 +2,7 @@ package br.com.insertkoin.airsoldier.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
+val GreenArmy = Color(0xFF1B5E20)
+val GreenArmyLight = Color(0xFF4C8C4A)
+val GreenArmyDark = Color(0xFF003300)
+val BrownArmy = Color(0xFF6D4C41)
