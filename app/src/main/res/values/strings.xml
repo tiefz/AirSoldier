@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">AirSoldier</string>
+    <string name="title_new_name">Iniciar um novo jogo</string>
+    <string name="title_button_go">GO</string>
 </resources>
