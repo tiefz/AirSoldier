@@ -3,4 +3,7 @@
     <string name="title_new_name">Iniciar um novo jogo</string>
     <string name="title_button_go">GO</string>
     <string name="menu_drawer_desc">Menu Drawer</string>
+    <string name="title_nivel">Nível</string>
+    <string name="title_loadout">Loadout</string>
+    <string name="edit_profile">Editar Perfil</string>
 </resources>
