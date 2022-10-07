@@ -18,7 +18,7 @@ private val LightColorPalette = lightColors(
     surface = GreenArmyLight,
     onSurface = Color.White,
     primary = GreenArmy,
-    onPrimary = Color.White
+    onPrimary = Color.White,
 
     /* Other default colors to override
     background = Color.White,
