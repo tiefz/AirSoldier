@@ -7,5 +7,4 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(ainSoldierRepository: AirSoldierRepository) : ViewModel() {
-
 }
