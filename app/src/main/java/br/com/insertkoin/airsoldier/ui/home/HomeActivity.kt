@@ -13,15 +13,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.insertkoin.airsoldier.ui.navigation.*
-import br.com.insertkoin.airsoldier.ui.navigation.screens.GameScreen
-import br.com.insertkoin.airsoldier.ui.navigation.screens.StoreScreen
 import br.com.insertkoin.airsoldier.ui.theme.AirSoldierTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -42,17 +36,6 @@ class HomeActivity : ComponentActivity() {
 @Composable
 private fun AirSoldierHome(
 ) {
-    fun NavHostController.navigateSingleTopTo(route: String) =
-        this.navigate(route) {
-            popUpTo(
-                this@navigateSingleTopTo.graph.findStartDestination().id
-            ) {
-                saveState = true
-            }
-            launchSingleTop = true
-            restoreState = true
-        }
-
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
@@ -93,24 +76,10 @@ private fun AirSoldierHome(
             HomeDrawer()
         }
     ) { innerPadding ->
-        NavHost(
+        AirSoldierNavHost(
             navController = navController,
-            startDestination = Splash.route,
             modifier = Modifier.padding(innerPadding)
-        ) {
-            composable(route = Splash.route) {
-                SplashScreenAirSoldier(navController)
-            }
-            composable(route = Home.route) {
-                HomeScreen()
-            }
-            composable(route = Game.route) {
-                GameScreen()
-            }
-            composable(route = Store.route) {
-                StoreScreen()
-            }
-        }
+        )
     }
 }
 
