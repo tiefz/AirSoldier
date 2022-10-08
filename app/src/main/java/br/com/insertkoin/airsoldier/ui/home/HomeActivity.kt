@@ -19,9 +19,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import br.com.insertkoin.airsoldier.ui.navigation.Splash
-import br.com.insertkoin.airsoldier.ui.navigation.SplashScreenAirSoldier
-import br.com.insertkoin.airsoldier.ui.navigation.airSoldierTabRowScreens
+import br.com.insertkoin.airsoldier.ui.navigation.*
+import br.com.insertkoin.airsoldier.ui.navigation.screens.GameScreen
+import br.com.insertkoin.airsoldier.ui.navigation.screens.StoreScreen
 import br.com.insertkoin.airsoldier.ui.theme.AirSoldierTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -57,21 +57,37 @@ private fun AirSoldierHome(
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
     val currentScreen =
-        airSoldierTabRowScreens.find { it.route == currentDestination?.route } ?: Splash
+        airSoldierTabRowScreens.find { it.route == currentDestination?.route } ?: Home
 
+
+    val showNavBars = navController
+        .currentBackStackEntryAsState().value?.destination?.route in showNavBars.map { it.route }
 
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            AppBar(
-                onNavigationIconClicked = {
-                    scope.launch {
-                        scaffoldState.drawerState.open()
+            if (showNavBars) {
+                AppBar(
+                    onNavigationIconClicked = {
+                        scope.launch {
+                            scaffoldState.drawerState.open()
+                        }
                     }
-                }
-            )
+                )
+            }
+        },
+        bottomBar = {
+            if (showNavBars) {
+                AirSoldierTabRow(
+                    allScreens = airSoldierTabRowScreens,
+                    onTabSelected = { newScreen ->
+                        navController.navigateSingleTopTo(newScreen.route)
+                    },
+                    currentScreen = currentScreen
+                )
+            }
         },
         drawerContent = {
             HomeDrawer()
@@ -83,7 +99,16 @@ private fun AirSoldierHome(
             modifier = Modifier.padding(innerPadding)
         ) {
             composable(route = Splash.route) {
-                SplashScreenAirSoldier()
+                SplashScreenAirSoldier(navController)
+            }
+            composable(route = Home.route) {
+                HomeScreen()
+            }
+            composable(route = Game.route) {
+                GameScreen()
+            }
+            composable(route = Store.route) {
+                StoreScreen()
             }
         }
     }

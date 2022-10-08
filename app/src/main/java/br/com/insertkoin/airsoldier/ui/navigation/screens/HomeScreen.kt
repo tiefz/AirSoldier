@@ -4,6 +4,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 
 @Composable
-fun SplashScreenAirSoldier() {
-    Text(text = "SplashScreen")
+fun HomeScreen() {
+    Text(text = "Home Screen")
 }

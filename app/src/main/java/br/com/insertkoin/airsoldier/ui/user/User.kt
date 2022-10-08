@@ -60,7 +60,7 @@ fun UserDetail(
             contentDescription = stringResource(R.string.app_name),
             contentScale = ContentScale.Crop,
             modifier = Modifier
-                .size(100.dp)
+                .size(75.dp)
                 .clip(CircleShape)
                 .border(2.dp, MaterialTheme.colors.primary, CircleShape)
 
@@ -71,9 +71,9 @@ fun UserDetail(
         )
         Spacer(modifier = modifier.width(16.dp))
         Column {
-            Text(text = tag, style = MaterialTheme.typography.h6)
+            Text(text = tag, style = MaterialTheme.typography.body1)
             Spacer(modifier = modifier.height(4.dp))
-            Text(text = name, style = MaterialTheme.typography.h4)
+            Text(text = name, style = MaterialTheme.typography.h5)
         }
     }
 }
