@@ -13,4 +13,8 @@ class AirSoldierRepository @Inject constructor(private val dao: AirSoldierDao) {
     suspend fun updateUser(user: User) {
         dao.updateUser(user)
     }
+
+    suspend fun getUser(): User? {
+        return dao.getUser(1)
+    }
 }
