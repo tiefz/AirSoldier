@@ -4,17 +4,17 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import br.com.insertkoin.airsoldier.data.models.User
 import br.com.insertkoin.airsoldier.ui.navigation.*
 import br.com.insertkoin.airsoldier.ui.theme.AirSoldierTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,9 +24,10 @@ import kotlinx.coroutines.launch
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val homeViewModel: HomeViewModel by viewModels()
         setContent {
             AirSoldierTheme {
-                AirSoldierHome()
+                AirSoldierHome(homeViewModel)
             }
         }
     }
@@ -35,14 +36,20 @@ class HomeActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun AirSoldierHome(
+    viewModel: HomeViewModel
 ) {
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
     val currentScreen =
         airSoldierTabRowScreens.find { it.route == currentDestination?.route } ?: Home
-
-
+    val user = viewModel.user.value ?: User(
+        id = 1,
+        name = "Usuário",
+        experience = 0,
+        level = 1,
+        avatar = 1
+    )
     val showNavBars = navController
         .currentBackStackEntryAsState().value?.destination?.route in showNavBars.map { it.route }
 
@@ -73,20 +80,15 @@ private fun AirSoldierHome(
             }
         },
         drawerContent = {
-            HomeDrawer()
+            HomeDrawer(
+                modifier = Modifier,
+                user
+            )
         }
     ) { innerPadding ->
         AirSoldierNavHost(
             navController = navController,
             modifier = Modifier.padding(innerPadding)
         )
-    }
-}
-
-@Preview
-@Composable
-fun PreviewAirSoldierApp() {
-    MaterialTheme {
-        AirSoldierHome()
     }
 }

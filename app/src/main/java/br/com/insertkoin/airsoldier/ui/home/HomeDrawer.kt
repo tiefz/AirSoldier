@@ -16,14 +16,23 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import br.com.insertkoin.airsoldier.R
+import br.com.insertkoin.airsoldier.data.models.User
 import br.com.insertkoin.airsoldier.ui.theme.AirSoldierTheme
 import br.com.insertkoin.airsoldier.ui.user.CircularLevelBar
 import br.com.insertkoin.airsoldier.ui.user.UserDetail
 
 @Composable
 fun HomeDrawer(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    user: User
 ) {
+    val tag = when (user.level) {
+        1 -> "recruta"
+        2 -> "Aspira"
+        3 -> "Soldado"
+        else -> "bugou"
+    }
+
     Column(
         modifier
             .fillMaxSize()
@@ -31,8 +40,8 @@ fun HomeDrawer(
     ) {
         UserDetail(
             modifier = modifier,
-            name = "Usuário",
-            tag = "Recruta"
+            name = user.name,
+            tag = tag
         )
         Text(
             modifier = modifier
@@ -55,7 +64,7 @@ fun HomeDrawer(
             )
             CircularLevelBar(
                 percentage = 0.85f,
-                level = 3,
+                level = user.level,
                 fontSize = 28.sp,
                 radius = 30.dp,
                 strokeWidth = 8.dp
@@ -195,7 +204,16 @@ fun LoadOutCard(
 fun HomeDrawerPreview() {
     AirSoldierTheme {
         Surface {
-            HomeDrawer()
+            HomeDrawer(
+                modifier = Modifier,
+                User(
+                    id = 1,
+                    name = "Tief",
+                    experience = 0,
+                    level = 3,
+                    avatar = 1
+                )
+            )
         }
     }
 }
