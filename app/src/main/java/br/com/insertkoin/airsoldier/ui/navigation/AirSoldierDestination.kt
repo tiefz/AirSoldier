@@ -3,6 +3,8 @@ package br.com.insertkoin.airsoldier.ui.navigation
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 interface AirSoldierDestination {
     val icon: ImageVector
@@ -27,6 +29,14 @@ object Round : AirSoldierDestination {
 object Profile : AirSoldierDestination {
     override val icon = Icons.Filled.AccountCircle
     override val route = "profile"
+    const val userPictureArg = "userPicture"
+    val routeWithArgs = "${route}?{${userPictureArg}}"
+    val arguments = listOf(
+        navArgument(userPictureArg) {
+            type = NavType.StringType
+            defaultValue = ""
+        }
+    )
 }
 
 object Success : AirSoldierDestination {

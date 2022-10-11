@@ -19,6 +19,8 @@ import br.com.insertkoin.airsoldier.ui.navigation.*
 import br.com.insertkoin.airsoldier.ui.theme.AirSoldierTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
@@ -38,21 +40,29 @@ class HomeActivity : ComponentActivity() {
 private fun AirSoldierHome(
     viewModel: HomeViewModel
 ) {
+    viewModel.getUser()
     val navController = rememberNavController()
     val currentBackStack by navController.currentBackStackEntryAsState()
     val currentDestination = currentBackStack?.destination
     val currentScreen =
         airSoldierTabRowScreens.find { it.route == currentDestination?.route } ?: Home
+    if (viewModel.user.value == null) {
+        viewModel.generateUser()
+    }
     val user = viewModel.user.value ?: User(
         id = 1,
         name = "Usuário",
         experience = 0,
         level = 1,
-        avatar = 1
+        picture = ""
     )
     val showNavBars = navController
         .currentBackStackEntryAsState().value?.destination?.route in showNavBars.map { it.route }
-
+    val updateUserPicture: (String) -> Unit = { viewModel.updateUserPicture(user, it) }
+    val saveButton: () -> Unit = {
+        viewModel.getUser()
+        navController.navigateSingleTopTo(Home.route)
+    }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
     Scaffold(
@@ -80,15 +90,24 @@ private fun AirSoldierHome(
             }
         },
         drawerContent = {
+            val encodedUrl = URLEncoder.encode(user.picture, StandardCharsets.UTF_8.toString())
             HomeDrawer(
                 modifier = Modifier,
-                user
+                user,
+                editProfile = {
+                    navController.navigateToEditProfile(encodedUrl)
+                    scope.launch {
+                        scaffoldState.drawerState.close()
+                    }
+                }
             )
         }
     ) { innerPadding ->
         AirSoldierNavHost(
             navController = navController,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            updateUserPicture = updateUserPicture,
+            saveButton = saveButton
         )
     }
 }
