@@ -13,12 +13,12 @@ interface AirSoldierDestination {
 
 object Home : AirSoldierDestination {
     override val icon = Icons.Filled.Home
-    override val route = "home"
+    override val route = "Home"
 }
 
 object Game : AirSoldierDestination {
     override val icon = Icons.Filled.NoteAlt
-    override val route = "game"
+    override val route = "Jogos"
 }
 
 object Round : AirSoldierDestination {
@@ -30,11 +30,15 @@ object Profile : AirSoldierDestination {
     override val icon = Icons.Filled.AccountCircle
     override val route = "profile"
     const val userPictureArg = "userPicture"
-    val routeWithArgs = "${route}?{${userPictureArg}}"
+    const val userNameArg = "userName"
+    val routeWithArgs = "${route}?{${userPictureArg}}/{${userNameArg}}"
     val arguments = listOf(
         navArgument(userPictureArg) {
             type = NavType.StringType
             defaultValue = ""
+        },
+        navArgument(userNameArg) {
+            type = NavType.StringType
         }
     )
 }
@@ -51,7 +55,7 @@ object Splash : AirSoldierDestination {
 
 object Store : AirSoldierDestination {
     override val icon = Icons.Filled.Store
-    override val route = "store"
+    override val route = "Loja"
 }
 
 val airSoldierTabRowScreens = listOf(Home, Game, Store)

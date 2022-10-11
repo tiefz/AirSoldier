@@ -7,4 +7,7 @@
     <string name="title_loadout">Loadout</string>
     <string name="edit_profile">Editar Perfil</string>
     <string name="edit_profile_title">Editar conta</string>
+    <string name="back">Voltar</string>
+    <string name="save_button">Salvar</string>
+    <string name="edit_name">Editar nome</string>
 </resources>

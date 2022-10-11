@@ -59,7 +59,8 @@ private fun AirSoldierHome(
     val showNavBars = navController
         .currentBackStackEntryAsState().value?.destination?.route in showNavBars.map { it.route }
     val updateUserPicture: (String) -> Unit = { viewModel.updateUserPicture(user, it) }
-    val saveButton: () -> Unit = {
+    val saveButton: (String) -> Unit = {
+        viewModel.updateUserName(user, it)
         viewModel.getUser()
         navController.navigateSingleTopTo(Home.route)
     }
@@ -95,7 +96,7 @@ private fun AirSoldierHome(
                 modifier = Modifier,
                 user,
                 editProfile = {
-                    navController.navigateToEditProfile(encodedUrl)
+                    navController.navigateToEditProfile(encodedUrl, user.name)
                     scope.launch {
                         scaffoldState.drawerState.close()
                     }

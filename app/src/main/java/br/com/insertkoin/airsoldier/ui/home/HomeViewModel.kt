@@ -18,16 +18,21 @@ class HomeViewModel @Inject constructor(private val airSoldierRepository: AirSol
 
     fun getUser() {
         viewModelScope.launch {
-//            airSoldierRepository.insertUser(
-//                User(
-//                    id = 1,
-//                    name = "Tief",
-//                    experience = 0,
-//                    level = 3,
-//                    picture = "/data/user/0/br.com.insertkoin.airsoldier/files/profilePic.jpg"
-//                )
-//            )
             _user.value = airSoldierRepository.getUser() ?: return@launch
+        }
+    }
+
+    fun updateUserName(user: User, userName: String) {
+        viewModelScope.launch {
+            airSoldierRepository.updateUser(
+                User(
+                    id = 1,
+                    name = userName,
+                    experience = user.experience,
+                    level = user.level,
+                    picture = user.picture
+                )
+            )
         }
     }
 
