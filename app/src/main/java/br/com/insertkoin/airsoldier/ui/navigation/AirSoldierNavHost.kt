@@ -7,12 +7,15 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import br.com.insertkoin.airsoldier.ui.navigation.screens.GameScreen
+import br.com.insertkoin.airsoldier.ui.navigation.screens.ProfileScreen
 import br.com.insertkoin.airsoldier.ui.navigation.screens.StoreScreen
 
 @Composable
 fun AirSoldierNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    updateUserPicture: (String) -> Unit,
+    saveButton: () -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -31,6 +34,18 @@ fun AirSoldierNavHost(
         composable(route = Store.route) {
             StoreScreen()
         }
+        composable(
+            route = Profile.routeWithArgs,
+            arguments = Profile.arguments
+        ) { navBackStackEntry ->
+            val userPicture =
+                navBackStackEntry.arguments?.getString(Profile.userPictureArg)
+            ProfileScreen(
+                saveButton = saveButton,
+                updateUserPicture = updateUserPicture,
+                userPicture = userPicture.toString()
+            )
+        }
     }
 }
 
@@ -44,3 +59,7 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         launchSingleTop = true
         restoreState = true
     }
+
+fun NavHostController.navigateToEditProfile(userPictureArg: String) {
+    this.navigateSingleTopTo("${Profile.route}?$userPictureArg")
+}

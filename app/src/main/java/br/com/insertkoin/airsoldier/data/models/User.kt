@@ -11,5 +11,11 @@ data class User(
     val name: String,
     val experience: Long,
     val level: Int,
-    val avatar: Int
+    val picture: String,
+    val tag: String = when (level) {
+        1 -> "recruta"
+        2 -> "Aspira"
+        3 -> "Soldado"
+        else -> "bugou"
+    }
 )

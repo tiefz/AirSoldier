@@ -6,4 +6,5 @@
     <string name="title_nivel">Nível</string>
     <string name="title_loadout">Loadout</string>
     <string name="edit_profile">Editar Perfil</string>
+    <string name="edit_profile_title">Editar conta</string>
 </resources>

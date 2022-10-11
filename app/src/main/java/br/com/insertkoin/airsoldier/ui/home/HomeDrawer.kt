@@ -24,15 +24,9 @@ import br.com.insertkoin.airsoldier.ui.user.UserDetail
 @Composable
 fun HomeDrawer(
     modifier: Modifier = Modifier,
-    user: User
+    user: User,
+    editProfile: () -> Unit
 ) {
-    val tag = when (user.level) {
-        1 -> "recruta"
-        2 -> "Aspira"
-        3 -> "Soldado"
-        else -> "bugou"
-    }
-
     Column(
         modifier
             .fillMaxSize()
@@ -40,8 +34,7 @@ fun HomeDrawer(
     ) {
         UserDetail(
             modifier = modifier,
-            name = user.name,
-            tag = tag
+            user
         )
         Text(
             modifier = modifier
@@ -114,7 +107,7 @@ fun HomeDrawer(
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                onClick = {},
+                onClick = editProfile,
                 elevation = ButtonDefaults.elevation(
                     defaultElevation = 10.dp,
                     pressedElevation = 15.dp,
@@ -211,8 +204,10 @@ fun HomeDrawerPreview() {
                     name = "Tief",
                     experience = 0,
                     level = 3,
-                    avatar = 1
-                )
+                    picture = "",
+                    tag = "Soldado"
+                ),
+                editProfile = {}
             )
         }
     }

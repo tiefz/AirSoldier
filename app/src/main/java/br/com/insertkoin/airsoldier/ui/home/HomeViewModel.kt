@@ -11,25 +11,53 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(airSoldierRepository: AirSoldierRepository) : ViewModel() {
+class HomeViewModel @Inject constructor(private val airSoldierRepository: AirSoldierRepository) :
+    ViewModel() {
 
-    private val _user = MutableLiveData<User?>()
+    private val _user = MutableLiveData<User>()
 
-    init {
+    fun getUser() {
         viewModelScope.launch {
-            airSoldierRepository.insertUser(
-                User(
-                    id = 1,
-                    name = "Tief",
-                    experience = 0,
-                    level = 3,
-                    avatar = 1
-                )
-            )
+//            airSoldierRepository.insertUser(
+//                User(
+//                    id = 1,
+//                    name = "Tief",
+//                    experience = 0,
+//                    level = 3,
+//                    picture = "/data/user/0/br.com.insertkoin.airsoldier/files/profilePic.jpg"
+//                )
+//            )
             _user.value = airSoldierRepository.getUser() ?: return@launch
         }
     }
 
-    val user: LiveData<User?>
+    fun updateUserPicture(user: User, userPicture: String) {
+        viewModelScope.launch {
+            airSoldierRepository.updateUser(
+                User(
+                    id = 1,
+                    name = user.name,
+                    experience = user.experience,
+                    level = user.level,
+                    picture = userPicture
+                )
+            )
+        }
+    }
+
+    fun generateUser() {
+        viewModelScope.launch {
+            airSoldierRepository.insertUser(
+                User(
+                    name = "Usuário",
+                    experience = 0,
+                    level = 1,
+                    picture = ""
+                )
+            )
+        }
+    }
+
+    val user: LiveData<User>
         get() = _user
 }
