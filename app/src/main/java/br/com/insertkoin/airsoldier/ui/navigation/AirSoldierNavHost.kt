@@ -15,8 +15,11 @@ fun AirSoldierNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     updateUserPicture: (String) -> Unit,
-    saveButton: () -> Unit
+    saveButton: (String) -> Unit
 ) {
+    val backButton: () -> Unit = {
+        navController.navigateSingleTopTo(Home.route)
+    }
     NavHost(
         navController = navController,
         startDestination = Splash.route,
@@ -40,10 +43,14 @@ fun AirSoldierNavHost(
         ) { navBackStackEntry ->
             val userPicture =
                 navBackStackEntry.arguments?.getString(Profile.userPictureArg)
+            val userName =
+                navBackStackEntry.arguments?.getString(Profile.userNameArg)
             ProfileScreen(
                 saveButton = saveButton,
                 updateUserPicture = updateUserPicture,
-                userPicture = userPicture.toString()
+                userName = userName.toString(),
+                userPicture = userPicture.toString(),
+                backButton = backButton
             )
         }
     }
@@ -60,6 +67,6 @@ fun NavHostController.navigateSingleTopTo(route: String) =
         restoreState = true
     }
 
-fun NavHostController.navigateToEditProfile(userPictureArg: String) {
-    this.navigateSingleTopTo("${Profile.route}?$userPictureArg")
+fun NavHostController.navigateToEditProfile(userPictureArg: String, userNameArg: String) {
+    this.navigateSingleTopTo("${Profile.route}?$userPictureArg/$userNameArg")
 }

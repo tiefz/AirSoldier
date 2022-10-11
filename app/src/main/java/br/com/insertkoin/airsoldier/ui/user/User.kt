@@ -38,6 +38,8 @@ import androidx.core.net.toUri
 import br.com.insertkoin.airsoldier.R
 import br.com.insertkoin.airsoldier.data.models.User
 import coil.compose.rememberAsyncImagePainter
+import java.net.URLDecoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun UserDetail(
@@ -56,8 +58,8 @@ fun UserDetail(
 }
 
 @Composable
-fun EditUserProfilePicture(updateUserPicture: (String) -> Unit) {
-    val imageUri = rememberSaveable { mutableStateOf("") }
+fun EditUserProfilePicture(userPicture: String, updateUserPicture: (String) -> Unit) {
+    val imageUri = rememberSaveable { mutableStateOf(userPicture) }
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
@@ -75,7 +77,7 @@ fun EditUserProfilePicture(updateUserPicture: (String) -> Unit) {
         modifier = Modifier,
         contentAlignment = Alignment.Center
     ) {
-        UserProfilePicture(imageUri.value, 120.dp)
+        UserProfilePicture(imageUri.value, 120.dp, isEncoded = true)
 
         Icon(
             imageVector = Icons.Filled.Edit,
@@ -88,12 +90,16 @@ fun EditUserProfilePicture(updateUserPicture: (String) -> Unit) {
 }
 
 @Composable
-fun UserProfilePicture(uri: String, size: Dp) {
+fun UserProfilePicture(uri: String, size: Dp, isEncoded: Boolean = false) {
     val painter = rememberAsyncImagePainter(
         if (uri.isEmpty()) {
             R.drawable.ic_airsoldier
         } else {
-            uri
+            if (isEncoded) {
+                URLDecoder.decode(uri, StandardCharsets.UTF_8.toString())
+            } else {
+                uri
+            }
         }
     )
 
