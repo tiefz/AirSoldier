@@ -1,6 +1,5 @@
 package br.com.insertkoin.airsoldier.ui.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -35,7 +34,6 @@ class HomeActivity : ComponentActivity() {
     }
 }
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 private fun AirSoldierHome(
     viewModel: HomeViewModel
@@ -56,8 +54,8 @@ private fun AirSoldierHome(
         level = 1,
         picture = ""
     )
-    val showNavBars = navController
-        .currentBackStackEntryAsState().value?.destination?.route in showNavBars.map { it.route }
+    val hideNavBar = navController
+        .currentBackStackEntryAsState().value?.destination?.route in hideNavBar.map { it.route }
     val updateUserPicture: (String) -> Unit = { viewModel.updateUserPicture(user, it) }
     val saveButton: (String) -> Unit = {
         viewModel.updateUserName(user, it)
@@ -69,7 +67,7 @@ private fun AirSoldierHome(
     Scaffold(
         scaffoldState = scaffoldState,
         topBar = {
-            if (showNavBars) {
+            if (!hideNavBar) {
                 AppBar(
                     onNavigationIconClicked = {
                         scope.launch {
@@ -80,7 +78,7 @@ private fun AirSoldierHome(
             }
         },
         bottomBar = {
-            if (showNavBars) {
+            if (!hideNavBar) {
                 AirSoldierTabRow(
                     allScreens = airSoldierTabRowScreens,
                     onTabSelected = { newScreen ->

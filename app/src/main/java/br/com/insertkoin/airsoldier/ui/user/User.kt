@@ -6,18 +6,14 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Icon
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -38,6 +34,7 @@ import androidx.core.net.toUri
 import br.com.insertkoin.airsoldier.R
 import br.com.insertkoin.airsoldier.data.models.User
 import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.launch
 import java.net.URLDecoder
 import java.nio.charset.StandardCharsets
 
@@ -59,6 +56,8 @@ fun UserDetail(
 
 @Composable
 fun EditUserProfilePicture(userPicture: String, updateUserPicture: (String) -> Unit) {
+    val scope = rememberCoroutineScope()
+    val snackbarHostState = remember { SnackbarHostState() }
     val imageUri = rememberSaveable { mutableStateOf(userPicture) }
     val context = LocalContext.current
     val launcher = rememberLauncherForActivityResult(
@@ -72,6 +71,7 @@ fun EditUserProfilePicture(userPicture: String, updateUserPicture: (String) -> U
         input.copyTo(outputFile.outputStream())
         imageUri.value = outputFile.toUri().toString()
         updateUserPicture(imageUri.value)
+        scope.launch { snackbarHostState.showSnackbar("Imagem Alterada!") }
     }
     Box(
         modifier = Modifier,
@@ -85,6 +85,28 @@ fun EditUserProfilePicture(userPicture: String, updateUserPicture: (String) -> U
             modifier = Modifier
                 .size(48.dp)
                 .clickable { launcher.launch("image/*") }
+        )
+        SnackbarHost(
+            modifier = Modifier.align(Alignment.BottomCenter),
+            hostState = snackbarHostState,
+            snackbar = { snackbarData: SnackbarData ->
+                Card(
+                    shape = RoundedCornerShape(8.dp),
+                    border = BorderStroke(2.dp, Color.White),
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .wrapContentSize()
+                ) {
+                    Column(
+                        modifier = Modifier.padding(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(imageVector = Icons.Default.Notifications, contentDescription = "")
+                        Text(text = snackbarData.message)
+                    }
+                }
+            }
         )
     }
 }
