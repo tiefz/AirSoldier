@@ -59,4 +59,4 @@ object Store : AirSoldierDestination {
 }
 
 val airSoldierTabRowScreens = listOf(Home, Game, Store)
-val showNavBars = listOf(Home, Game, Round, Profile, Success, Store)
+val hideNavBar = listOf(Splash)
