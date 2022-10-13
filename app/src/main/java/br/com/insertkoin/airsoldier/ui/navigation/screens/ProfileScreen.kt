@@ -72,6 +72,7 @@ fun ProfileScreen(
                 OutlinedTextField(
                     value = name,
                     onValueChange = { name = it },
+                    singleLine = true,
                     label = { Text(text = stringResource(R.string.edit_name)) }
                 )
             }
