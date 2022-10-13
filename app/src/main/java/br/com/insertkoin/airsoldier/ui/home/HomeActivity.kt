@@ -59,8 +59,6 @@ private fun AirSoldierHome(
     val updateUserPicture: (String) -> Unit = { viewModel.updateUserPicture(user, it) }
     val saveButton: (String) -> Unit = {
         viewModel.updateUserName(user, it)
-        viewModel.getUser()
-        navController.navigateSingleTopTo(Home.route)
     }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
