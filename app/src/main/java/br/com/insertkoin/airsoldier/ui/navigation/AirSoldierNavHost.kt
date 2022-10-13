@@ -17,9 +17,6 @@ fun AirSoldierNavHost(
     updateUserPicture: (String) -> Unit,
     saveButton: (String) -> Unit
 ) {
-    val backButton: () -> Unit = {
-        navController.navigateSingleTopTo(Home.route)
-    }
     NavHost(
         navController = navController,
         startDestination = Splash.route,
@@ -49,8 +46,7 @@ fun AirSoldierNavHost(
                 saveButton = saveButton,
                 updateUserPicture = updateUserPicture,
                 userName = userName.toString(),
-                userPicture = userPicture.toString(),
-                backButton = backButton
+                userPicture = userPicture.toString()
             )
         }
     }
