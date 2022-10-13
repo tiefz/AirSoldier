@@ -9,6 +9,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -47,7 +48,8 @@ private fun AirSoldierHome(
     if (viewModel.user.value == null) {
         viewModel.generateUser()
     }
-    val user = viewModel.user.value ?: User(
+    val userData = viewModel.user.observeAsState()
+    val user = userData.value ?: User(
         id = 1,
         name = "Usuário",
         experience = 0,

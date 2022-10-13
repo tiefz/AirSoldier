@@ -79,6 +79,9 @@ dependencies {
 
     //Coil Image
     implementation "io.coil-kt:coil-compose:$coil_version"
+
+    //Compose LiveData
+    implementation "androidx.compose.runtime:runtime-livedata:$compose_livedata_version"
 }
 
 kapt {
