@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import br.com.insertkoin.airsoldier.ui.navigation.screens.GameScreen
+import br.com.insertkoin.airsoldier.ui.navigation.screens.HomeScreen
 import br.com.insertkoin.airsoldier.ui.navigation.screens.ProfileScreen
 import br.com.insertkoin.airsoldier.ui.navigation.screens.StoreScreen
 
