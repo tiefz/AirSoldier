@@ -10,4 +10,5 @@
     <string name="back">Voltar</string>
     <string name="save_button">Salvar</string>
     <string name="edit_name">Editar nome</string>
+    <string name="statistics_title">Estatísticas</string>
 </resources>

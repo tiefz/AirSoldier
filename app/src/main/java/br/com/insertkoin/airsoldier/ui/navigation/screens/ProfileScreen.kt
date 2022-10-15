@@ -42,8 +42,8 @@ fun ProfileScreen(
                     onClick = {
                         scope.launch {
                             focusManager.clearFocus()
-                            scaffoldState.snackbarHostState.showSnackbar("Nome alterado!")
                             saveButton(name)
+                            scaffoldState.snackbarHostState.showSnackbar("Nome alterado!")
                         }
                     },
                     elevation = ButtonDefaults.elevation(

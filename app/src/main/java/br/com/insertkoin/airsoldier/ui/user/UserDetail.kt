@@ -70,8 +70,8 @@ fun EditUserProfilePicture(userPicture: String, updateUserPicture: (String) -> U
         val outputFile = context.filesDir.resolve("${System.currentTimeMillis()}profilePic.jpg")
         input.copyTo(outputFile.outputStream())
         imageUri.value = outputFile.toUri().toString()
-        updateUserPicture(imageUri.value)
         scope.launch { snackbarHostState.showSnackbar("Imagem Alterada!") }
+        updateUserPicture(imageUri.value)
     }
     Box(
         modifier = Modifier,
