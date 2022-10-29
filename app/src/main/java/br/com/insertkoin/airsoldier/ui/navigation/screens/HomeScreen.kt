@@ -26,7 +26,7 @@ import br.com.insertkoin.airsoldier.ui.user.UserDetail
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onStartClick: () -> Unit
+    onStartClick: (String) -> Unit
 ) {
     val homeScreenViewModel = hiltViewModel<HomeViewModel>()
     homeScreenViewModel.getUser()
@@ -70,7 +70,7 @@ fun HomeScreen(
         )
         Spacer(modifier = modifier.height(16.dp))
         Button(
-            onClick = onStartClick,
+            onClick = { onStartClick(gameName) },
             enabled = gameName.isEmpty().not(),
             elevation = ButtonDefaults.elevation(8.dp),
             shape = MaterialTheme.shapes.medium,
@@ -121,7 +121,6 @@ fun StatisticsTextField(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = modifier.height(16.dp))
         Text(text = "Jogos: 10")
-        Text(text = "Tempo total de jogos: 06h:10m")
         Row(
         ) {
             Text(

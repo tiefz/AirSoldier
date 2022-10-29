@@ -4,10 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import br.com.insertkoin.airsoldier.data.models.Game
 import br.com.insertkoin.airsoldier.data.models.User
 import br.com.insertkoin.airsoldier.repository.AirSoldierRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.util.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -15,6 +17,13 @@ class HomeViewModel @Inject constructor(private val airSoldierRepository: AirSol
     ViewModel() {
 
     private val _user = MutableLiveData<User>()
+    private val _gameList = MutableLiveData<List<Game>>()
+
+    init {
+        viewModelScope.launch {
+            _gameList.value = airSoldierRepository.getGames() ?: return@launch
+        }
+    }
 
     fun getUser() {
         viewModelScope.launch {
@@ -63,6 +72,23 @@ class HomeViewModel @Inject constructor(private val airSoldierRepository: AirSol
         }
     }
 
+    fun startGame(name: String) {
+        viewModelScope.launch {
+            airSoldierRepository.insertGame(
+                Game(
+                    name = name,
+                    date = Date(),
+                    kills = 0,
+                    deaths = 0,
+                    isFinished = false
+                )
+            )
+        }
+    }
+
     val user: LiveData<User>
         get() = _user
+
+    val gameList: LiveData<List<Game>>
+        get() = _gameList
 }

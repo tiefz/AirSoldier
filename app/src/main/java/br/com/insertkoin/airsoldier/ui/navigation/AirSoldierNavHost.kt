@@ -13,7 +13,8 @@ fun AirSoldierNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
     updateUserPicture: (String) -> Unit,
-    saveButton: (String) -> Unit
+    saveButton: (String) -> Unit,
+    startGame: (String) -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -26,6 +27,7 @@ fun AirSoldierNavHost(
         composable(route = Home.route) {
             HomeScreen(
                 onStartClick = {
+                    startGame(it)
                     navController.navigateSingleTopTo(Round.route)
                 }
             )

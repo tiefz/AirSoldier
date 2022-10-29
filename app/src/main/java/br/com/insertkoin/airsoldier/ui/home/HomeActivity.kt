@@ -48,6 +48,14 @@ private fun AirSoldierHome(
     if (viewModel.user.value == null) {
         viewModel.generateUser()
     }
+    val gameList = viewModel.gameList.observeAsState()
+    if (!gameList.value.isNullOrEmpty()) {
+        gameList.value?.forEach {
+            if (!it.isFinished) {
+                navController.navigateSingleTopTo(Round.route)
+            }
+        }
+    }
     val userData = viewModel.user.observeAsState()
     val user = userData.value ?: User(
         id = 1,
@@ -61,6 +69,9 @@ private fun AirSoldierHome(
     val updateUserPicture: (String) -> Unit = { viewModel.updateUserPicture(user, it) }
     val saveButton: (String) -> Unit = {
         viewModel.updateUserName(user, it)
+    }
+    val startGame: (String) -> Unit = {
+        viewModel.startGame(it)
     }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -106,7 +117,8 @@ private fun AirSoldierHome(
             navController = navController,
             modifier = Modifier.padding(innerPadding),
             updateUserPicture = updateUserPicture,
-            saveButton = saveButton
+            saveButton = saveButton,
+            startGame = startGame
         )
     }
 }
