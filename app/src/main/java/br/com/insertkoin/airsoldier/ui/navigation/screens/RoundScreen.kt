@@ -9,6 +9,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.paint
@@ -18,14 +19,32 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
+import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.insertkoin.airsoldier.R
-import br.com.insertkoin.airsoldier.ui.theme.AirSoldierTheme
+import br.com.insertkoin.airsoldier.data.models.Game
+import br.com.insertkoin.airsoldier.ui.home.HomeViewModel
 
 @Composable
-fun RoundScreen() {
+fun RoundScreen(
+    gameId: Int,
+    finishGame: (Game) -> Unit
+) {
+    val homeScreenViewModel = hiltViewModel<HomeViewModel>()
+    var currentGame = homeScreenViewModel.currentGame.observeAsState()
+    if (gameId > 0) {
+        homeScreenViewModel.getGame(gameId)
+    } else {
+        val gameList = homeScreenViewModel.gameList.observeAsState()
+        if (!gameList.value.isNullOrEmpty()) {
+            gameList.value?.forEach {
+                if (!it.isFinished) {
+                    homeScreenViewModel.getGame(it.id)
+                }
+            }
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -45,7 +64,7 @@ fun RoundScreen() {
             Column(verticalArrangement = Arrangement.SpaceAround) {
                 Text(text = "SAFE ZONE", style = MaterialTheme.typography.h3)
                 Text(text = "Game:")
-                Text(text = "Alcatraz")
+                Text(text = currentGame.value?.name.toString())
                 Text(text = "Loadout Selecionado:")
                 OutlinedTextField(
                     value = selectedText,
@@ -84,15 +103,17 @@ fun RoundScreen() {
                     colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red)
                 ) {
                 }
+                Button(onClick = {
+                    currentGame.value?.let { game ->
+                        game.isFinished = true
+                        finishGame(
+                            game
+                        )
+                    }
+                }) {
+                    Text(text = "Encerrar o jogo")
+                }
             }
         }
-    }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun RoundPreview() {
-    AirSoldierTheme {
-        RoundScreen()
     }
 }

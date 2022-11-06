@@ -23,7 +23,15 @@ class AirSoldierRepository @Inject constructor(private val dao: AirSoldierDao) {
         dao.insertGame(game)
     }
 
+    suspend fun updateGame(game: Game) {
+        dao.updateGame(game)
+    }
+
     suspend fun getGames(): List<Game>? {
         return dao.getGames()
+    }
+
+    suspend fun getGame(gameId: Int): Game? {
+        return dao.getGame(gameId)
     }
 }

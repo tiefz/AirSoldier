@@ -7,6 +7,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import br.com.insertkoin.airsoldier.ui.navigation.screens.*
+import br.com.insertkoin.airsoldier.data.models.Game as GameModel
 
 @Composable
 fun AirSoldierNavHost(
@@ -14,7 +15,8 @@ fun AirSoldierNavHost(
     modifier: Modifier = Modifier,
     updateUserPicture: (String) -> Unit,
     saveButton: (String) -> Unit,
-    startGame: (String) -> Unit
+    startGame: (String) -> Unit,
+    finishGame: (GameModel) -> Unit
 ) {
     NavHost(
         navController = navController,
@@ -26,14 +28,23 @@ fun AirSoldierNavHost(
         }
         composable(route = Home.route) {
             HomeScreen(
-                onStartClick = {
+                startGame = {
                     startGame(it)
-                    navController.navigateSingleTopTo(Round.route)
-                }
+                    navController.navigateToGameScreen(0)
+                },
+                navHostController = navController
             )
         }
-        composable(route = Round.route) {
-            RoundScreen()
+        composable(
+            route = Round.routeWithArgs,
+            arguments = Round.arguments
+        ) { navBackStackEntry ->
+            val gameId =
+                navBackStackEntry.arguments?.getInt(Round.gameIdArg)
+            RoundScreen(
+                gameId = gameId ?: 0,
+                finishGame = finishGame
+            )
         }
         composable(route = Game.route) {
             GameScreen()
@@ -72,4 +83,8 @@ fun NavHostController.navigateSingleTopTo(route: String) =
 
 fun NavHostController.navigateToEditProfile(userPictureArg: String, userNameArg: String) {
     this.navigateSingleTopTo("${Profile.route}?$userPictureArg/$userNameArg")
+}
+
+fun NavHostController.navigateToGameScreen(gameIdArgs: Int) {
+    this.navigateSingleTopTo("${Round.route}/$gameIdArgs")
 }

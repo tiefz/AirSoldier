@@ -25,6 +25,12 @@ interface AirSoldierDao {
     @Insert
     suspend fun insertGame(game: Game)
 
+    @Update
+    suspend fun updateGame(game: Game)
+
     @Query("SELECT * from game_table ORDER BY date DESC")
     suspend fun getGames(): List<Game>?
+
+    @Query("SELECT * from game_table WHERE id = :key")
+    suspend fun getGame(key: Int): Game?
 }

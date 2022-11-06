@@ -18,6 +18,7 @@ class HomeViewModel @Inject constructor(private val airSoldierRepository: AirSol
 
     private val _user = MutableLiveData<User>()
     private val _gameList = MutableLiveData<List<Game>>()
+    private val _game = MutableLiveData<Game>()
 
     init {
         viewModelScope.launch {
@@ -86,9 +87,24 @@ class HomeViewModel @Inject constructor(private val airSoldierRepository: AirSol
         }
     }
 
+    fun finishGame(game: Game) {
+        viewModelScope.launch {
+            airSoldierRepository.updateGame(game)
+        }
+    }
+
+    fun getGame(gameId: Int) {
+        viewModelScope.launch {
+            _game.value = airSoldierRepository.getGame(gameId) ?: return@launch
+        }
+    }
+
     val user: LiveData<User>
         get() = _user
 
     val gameList: LiveData<List<Game>>
         get() = _gameList
+
+    val currentGame: LiveData<Game>
+        get() = _game
 }

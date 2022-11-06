@@ -21,6 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
+import br.com.insertkoin.airsoldier.data.models.Game as GameModel
 
 @AndroidEntryPoint
 class HomeActivity : ComponentActivity() {
@@ -48,14 +49,6 @@ private fun AirSoldierHome(
     if (viewModel.user.value == null) {
         viewModel.generateUser()
     }
-    val gameList = viewModel.gameList.observeAsState()
-    if (!gameList.value.isNullOrEmpty()) {
-        gameList.value?.forEach {
-            if (!it.isFinished) {
-                navController.navigateSingleTopTo(Round.route)
-            }
-        }
-    }
     val userData = viewModel.user.observeAsState()
     val user = userData.value ?: User(
         id = 1,
@@ -72,6 +65,12 @@ private fun AirSoldierHome(
     }
     val startGame: (String) -> Unit = {
         viewModel.startGame(it)
+    }
+    val finishGame: (GameModel) -> Unit = {
+        viewModel.finishGame(
+            game = it
+        )
+        navController.navigateSingleTopTo(Home.route)
     }
     val scaffoldState = rememberScaffoldState()
     val scope = rememberCoroutineScope()
@@ -118,7 +117,8 @@ private fun AirSoldierHome(
             modifier = Modifier.padding(innerPadding),
             updateUserPicture = updateUserPicture,
             saveButton = saveButton,
-            startGame = startGame
+            startGame = startGame,
+            finishGame = finishGame
         )
     }
 }

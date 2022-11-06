@@ -24,6 +24,14 @@ object Game : AirSoldierDestination {
 object Round : AirSoldierDestination {
     override val icon = Icons.Filled.Paragliding
     override val route = "round"
+    const val gameIdArg = "gameId"
+    val routeWithArgs = "${route}/{${gameIdArg}}"
+    val arguments = listOf(
+        navArgument(gameIdArg) {
+            type = NavType.IntType
+            defaultValue = 0
+        }
+    )
 }
 
 object Profile : AirSoldierDestination {

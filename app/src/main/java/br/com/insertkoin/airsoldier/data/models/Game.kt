@@ -8,10 +8,10 @@ import java.util.*
 @Entity(tableName = DATABASE_GAME)
 data class Game(
     @PrimaryKey(autoGenerate = true)
-    val id: Int = 0,
+    var id: Int = 0,
     val name: String,
     val date: Date,
     val kills: Int,
     val deaths: Int,
-    val isFinished: Boolean
+    var isFinished: Boolean
 )
