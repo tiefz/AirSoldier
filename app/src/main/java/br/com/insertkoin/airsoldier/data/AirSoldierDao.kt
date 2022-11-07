@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import br.com.insertkoin.airsoldier.data.models.Game
 import br.com.insertkoin.airsoldier.data.models.User
 
 @Dao
@@ -20,4 +21,16 @@ interface AirSoldierDao {
 
     @Query("DELETE FROM user_table")
     suspend fun clearUser()
+
+    @Insert
+    suspend fun insertGame(game: Game)
+
+    @Update
+    suspend fun updateGame(game: Game)
+
+    @Query("SELECT * from game_table ORDER BY date DESC")
+    suspend fun getGames(): List<Game>?
+
+    @Query("SELECT * from game_table WHERE id = :key")
+    suspend fun getGame(key: Int): Game?
 }

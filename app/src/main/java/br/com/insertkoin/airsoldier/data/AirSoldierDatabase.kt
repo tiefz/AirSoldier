@@ -10,7 +10,7 @@ import java.util.*
 
 @Database(
     entities = [User::class, Game::class, LoadOut::class, Round::class],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 @TypeConverters(Converters::class)
@@ -53,6 +53,6 @@ class Converters {
 
     @TypeConverter
     fun dateToTimestamp(date: Date?): Long? {
-        return date?.time?.toLong()
+        return date?.time
     }
 }

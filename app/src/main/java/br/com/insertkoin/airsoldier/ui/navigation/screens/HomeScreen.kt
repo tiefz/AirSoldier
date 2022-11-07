@@ -17,19 +17,30 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import br.com.insertkoin.airsoldier.R
 import br.com.insertkoin.airsoldier.data.models.User
 import br.com.insertkoin.airsoldier.ui.home.HomeViewModel
+import br.com.insertkoin.airsoldier.ui.navigation.navigateToGameScreen
 import br.com.insertkoin.airsoldier.ui.user.CircularLevelBar
 import br.com.insertkoin.airsoldier.ui.user.UserDetail
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onStartClick: () -> Unit
+    startGame: (String) -> Unit,
+    navHostController: NavHostController
 ) {
     val homeScreenViewModel = hiltViewModel<HomeViewModel>()
     homeScreenViewModel.getUser()
+    val gameList = homeScreenViewModel.gameList.observeAsState()
+    if (!gameList.value.isNullOrEmpty()) {
+        gameList.value?.forEach {
+            if (!it.isFinished) {
+                navHostController.navigateToGameScreen(it.id)
+            }
+        }
+    }
     val userData = homeScreenViewModel.user.observeAsState()
     val user = userData.value ?: User(
         id = 1,
@@ -70,7 +81,7 @@ fun HomeScreen(
         )
         Spacer(modifier = modifier.height(16.dp))
         Button(
-            onClick = onStartClick,
+            onClick = { startGame(gameName) },
             enabled = gameName.isEmpty().not(),
             elevation = ButtonDefaults.elevation(8.dp),
             shape = MaterialTheme.shapes.medium,
@@ -121,7 +132,6 @@ fun StatisticsTextField(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = modifier.height(16.dp))
         Text(text = "Jogos: 10")
-        Text(text = "Tempo total de jogos: 06h:10m")
         Row(
         ) {
             Text(
