@@ -19,11 +19,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.toSize
 import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.insertkoin.airsoldier.R
 import br.com.insertkoin.airsoldier.data.models.Game
+import br.com.insertkoin.airsoldier.data.models.Round
 import br.com.insertkoin.airsoldier.ui.home.HomeViewModel
 
 @Composable
@@ -33,6 +35,7 @@ fun RoundScreen(
 ) {
     val homeScreenViewModel = hiltViewModel<HomeViewModel>()
     var currentGame = homeScreenViewModel.currentGame.observeAsState()
+    val roundList = homeScreenViewModel.roundList.observeAsState()
     if (gameId > 0) {
         homeScreenViewModel.getGame(gameId)
     } else {
@@ -56,8 +59,8 @@ fun RoundScreen(
     ) {
         Surface {
             var expanded by remember { mutableStateOf(false) }
-            val loadoutList = listOf("Sniper", "Assalt", "DMR", "Support")
-            var selectedText by remember { mutableStateOf(loadoutList.first()) }
+            val loadOutList = listOf("Sniper", "Assalt", "DMR", "Support")
+            var selectedText by remember { mutableStateOf(loadOutList.first()) }
             var textFieldSize by remember { mutableStateOf(Size.Zero) }
             val icon =
                 if (expanded) Icons.Filled.KeyboardArrowUp else Icons.Filled.KeyboardArrowDown
@@ -85,7 +88,7 @@ fun RoundScreen(
                     modifier = Modifier
                         .width(with(LocalDensity.current) { textFieldSize.width.toDp() })
                 ) {
-                    loadoutList.forEach { label ->
+                    loadOutList.forEach { label ->
                         DropdownMenuItem(onClick = {
                             selectedText = label
                             expanded = false
@@ -96,7 +99,7 @@ fun RoundScreen(
                 }
                 Text(text = "Ir para o combate!")
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = { homeScreenViewModel.startRound(3) },
                     shape = CircleShape,
                     modifier = Modifier.size(100.dp),
                     border = BorderStroke(5.dp, color = MaterialTheme.colors.error),
@@ -116,4 +119,38 @@ fun RoundScreen(
             }
         }
     }
+}
+
+@Composable
+fun roundListItem(
+    modifier: Modifier = Modifier,
+    round: Round
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceAround
+    ) {
+        Text(text = "#${round.id}")
+        Text(text = "Abates \uD83D\uDC80: ${round.kills}")
+        Text(text = "Sniper")
+        //icone caveira X
+        //icone trofeu
+        //icone editar
+        //icone deletar
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun roundListItemPreview() {
+    roundListItem(
+        modifier = Modifier, Round(
+            id = 0,
+            kills = 3,
+            isDead = true,
+            isTeamWinner = true,
+            loadOut = 3,
+            isFinished = false
+        )
+    )
 }

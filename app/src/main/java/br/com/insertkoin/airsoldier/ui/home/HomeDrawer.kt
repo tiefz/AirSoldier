@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -15,6 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import br.com.insertkoin.airsoldier.R
 import br.com.insertkoin.airsoldier.data.models.User
 import br.com.insertkoin.airsoldier.ui.theme.AirSoldierTheme
@@ -27,6 +29,20 @@ fun HomeDrawer(
     user: User,
     editProfile: () -> Unit
 ) {
+    val homeScreenViewModel = hiltViewModel<HomeViewModel>()
+    val loadOutData = homeScreenViewModel.loadOutList.observeAsState()
+    val loadOutList = loadOutData.value ?: listOf()
+    var loadOuts = mutableListOf<LoadOutItem>()
+    loadOutList.forEach {
+        loadOuts.add(
+            LoadOutItem(
+                id = it.id,
+                title = it.name,
+                level = it.level,
+                percentage = (it.experience.toDouble() / 100).toFloat()
+            )
+        )
+    }
     Column(
         modifier
             .fillMaxSize()
@@ -73,34 +89,40 @@ fun HomeDrawer(
             fontWeight = FontWeight.Bold,
             text = stringResource(R.string.title_loadout)
         )
-        LoadOutList(
-            items = listOf(
-                LoadOutItem(
-                    1,
-                    "ASSALT",
-                    1,
-                    0f
-                ),
-                LoadOutItem(
-                    2,
-                    "SUPORT",
-                    1,
-                    0.13f
-                ),
-                LoadOutItem(
-                    3,
-                    "DMR",
-                    1,
-                    0.44f
-                ),
-                LoadOutItem(
-                    4,
-                    "sniper",
-                    3,
-                    0.89f
+        if (loadOutList.isEmpty()) {
+            LoadOutList(
+                items = listOf(
+                    LoadOutItem(
+                        1,
+                        "Assalto",
+                        1,
+                        0.01f
+                    ),
+                    LoadOutItem(
+                        2,
+                        "Suporte",
+                        1,
+                        0.01f
+                    ),
+                    LoadOutItem(
+                        3,
+                        "DMR",
+                        1,
+                        0.01f
+                    ),
+                    LoadOutItem(
+                        4,
+                        "Sniper",
+                        3,
+                        0.01f
+                    )
                 )
             )
-        )
+        } else {
+            LoadOutList(
+                items = loadOuts
+            )
+        }
         Row(
             modifier = Modifier
                 .fillMaxWidth(),

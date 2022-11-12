@@ -1,10 +1,9 @@
 package br.com.insertkoin.airsoldier.data
 
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 import br.com.insertkoin.airsoldier.data.models.Game
+import br.com.insertkoin.airsoldier.data.models.LoadOut
+import br.com.insertkoin.airsoldier.data.models.Round
 import br.com.insertkoin.airsoldier.data.models.User
 
 @Dao
@@ -33,4 +32,31 @@ interface AirSoldierDao {
 
     @Query("SELECT * from game_table WHERE id = :key")
     suspend fun getGame(key: Int): Game?
+
+    @Insert
+    suspend fun insertRound(round: Round)
+
+    @Update
+    suspend fun updateRound(round: Round)
+
+    @Query("SELECT * from round_table ORDER BY id DESC")
+    suspend fun getRounds(): List<Round>?
+
+    @Query("SELECT * from round_table WHERE id = :key")
+    suspend fun getRound(key: Int): Round?
+
+    @Query("DELETE from round_table")
+    suspend fun clearRounds()
+
+    @Delete
+    suspend fun deleteRound(vararg round: Round)
+
+    @Insert
+    suspend fun insertLoadOut(loadOut: LoadOut)
+
+    @Update
+    suspend fun updateLoadOut(loadOut: LoadOut)
+
+    @Query("SELECT * from loadout_table")
+    suspend fun getLoadOuts(): List<LoadOut>?
 }
